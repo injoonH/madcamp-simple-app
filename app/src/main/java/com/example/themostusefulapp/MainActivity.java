@@ -1,7 +1,6 @@
 package com.example.themostusefulapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
@@ -21,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "개발새발(https://jeong9216.tistory.com/) 블로그 좋아요!");
 
         init(); //객체 정의
         SettingListener(); //리스너 등록
