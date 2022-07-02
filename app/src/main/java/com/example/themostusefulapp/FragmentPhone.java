@@ -3,6 +3,7 @@ package com.example.themostusefulapp;
 import android.Manifest;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -79,11 +80,11 @@ public class FragmentPhone extends Fragment {
 
         /* ==== create new contact ==== */
 
+        // TODO: Get photo from user
         EditText editName = view.findViewById(R.id.editName);
         EditText editNumber = view.findViewById(R.id.editNumber);
         Button contactAddBtn = view.findViewById(R.id.contactAddBtn);
 
-        // TODO: Get photo from user
         contactAddBtn.setOnClickListener(v -> {
             String name = editName.getText().toString();
             String number = editNumber.getText().toString();
@@ -97,7 +98,19 @@ public class FragmentPhone extends Fragment {
                 return;
             }
 
+            // TODO: Store in SharedPreferences
             adapter.addContact(new Contact(name, number, null));
+
+            // TODO: Add contacts & Add photo
+            Intent intent = new Intent(Intent.ACTION_INSERT);
+            intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+            intent.putExtra(ContactsContract.Intents.Insert.NAME, name);
+            intent.putExtra(ContactsContract.Intents.Insert.PHONE, number);
+
+            if (intent.resolveActivity(context.getPackageManager()) != null)
+                startActivity(intent);
+            else
+                Toast.makeText(context, "No apps support creating a contact", Toast.LENGTH_SHORT).show();
         });
 
         /* ==== request contacts permission ==== */
@@ -138,6 +151,9 @@ public class FragmentPhone extends Fragment {
     }
 
     private void getContactList(Context context) {
+        // TODO: Check if data is in cache
+//        SharedPreferences contactPref = context.getSharedPreferences("ContactPref", Context.MODE_PRIVATE);
+
         Cursor cursor = context.getContentResolver().query(
                 ContactsContract.Contacts.CONTENT_URI,
                 null,

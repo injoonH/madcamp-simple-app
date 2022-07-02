@@ -74,6 +74,10 @@ public class ContactsRecViewAdapter extends RecyclerView.Adapter<ContactsRecView
         notifyDataSetChanged();
     }
 
+    public ArrayList<Contact> getContacts() {
+        return contacts;
+    }
+
     /* ==== ViewHolder ==== */
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

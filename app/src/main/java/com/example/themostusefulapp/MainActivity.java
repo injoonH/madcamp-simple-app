@@ -18,19 +18,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /* ==== set initial fragment ==== */
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        if (savedInstanceState == null) {
-            fragmentManager.beginTransaction()
-                    .setReorderingAllowed(true)
-                    .add(R.id.tabContainer, FragmentPhone.class, null)
-                    .commit();
-        }
-
         /* ==== set navigation bar ==== */
 
         BottomNavigationView navigation = findViewById(R.id.bottomNavigationView);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
         navigation.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.tab_phonenum)
