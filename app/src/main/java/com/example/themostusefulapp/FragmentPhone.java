@@ -97,12 +97,7 @@ public class FragmentPhone extends Fragment {
                 return;
             }
 
-            adapter.addContact(new Contact(
-                    editName.getText().toString(),
-                    editNumber.getText().toString(),
-                    null
-//                new ByteArrayInputStream("dummy photo stream".getBytes(StandardCharsets.UTF_8))
-            ));
+            adapter.addContact(new Contact(name, number, null));
         });
 
         /* ==== request contacts permission ==== */
