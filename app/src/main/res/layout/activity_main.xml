@@ -10,7 +10,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/tabContainer"
-        android:name="com.example.themostusefulapp.FragmentPhone"
+        android:name="com.example.themostusefulapp.FragmentContacts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomNavigationView" />

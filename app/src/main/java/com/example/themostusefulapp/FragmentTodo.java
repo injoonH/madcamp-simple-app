@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-public class fragment_todo extends Fragment {
-    public fragment_todo() {
+public class FragmentTodo extends Fragment {
+    public FragmentTodo() {
     }
 
     @Override
