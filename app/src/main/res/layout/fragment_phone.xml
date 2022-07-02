@@ -6,7 +6,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:padding="20dp"
-    tools:context=".fragment_phone">
+    tools:context=".FragmentPhone">
 
     <EditText
         android:id="@+id/editName"
@@ -28,7 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editNumber"
-        android:layout_marginVertical="10dp"
+        android:layout_marginTop="10dp"
+        android:minHeight="60dp"
         android:text="Create new contact" />
 
     <View
@@ -44,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/separator"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        tools:listitem="@layout/contacts_list_item" />
 
 </RelativeLayout>

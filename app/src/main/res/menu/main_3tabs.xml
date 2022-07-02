@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
         android:id="@+id/tab_phonenum"
-        android:title="Phone"
         android:enabled="true"
-        android:icon="@drawable/ic_phone_solid"/>
+        android:icon="@drawable/ic_phone_solid"
+        android:title="Contact" />
     <item
         android:id="@+id/tab_image"
-        android:title="Image"
         android:enabled="true"
-        android:icon="@drawable/ic_image_solid"/>
+        android:icon="@drawable/ic_image_solid"
+        android:title="Gallery" />
     <item
         android:id="@+id/tab_todo"
-        android:title="Todo"
         android:enabled="true"
-        android:icon="@drawable/ic_check_solid"/>
+        android:icon="@drawable/ic_check_solid"
+        android:title="Todo" />
 </menu>

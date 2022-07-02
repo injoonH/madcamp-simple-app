@@ -1,8 +1,7 @@
 package com.example.themostusefulapp;
 
-import androidx.annotation.NonNull;
-
 import java.io.InputStream;
+
 
 public class Contact {
     private final String name;
@@ -25,15 +24,5 @@ public class Contact {
 
     public InputStream getPhoto() {
         return photo;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "Contact{" +
-                "name='" + name + '\'' +
-                ", number='" + number + '\'' +
-                ", photo='" + photo + '\'' +
-                '}';
     }
 }
