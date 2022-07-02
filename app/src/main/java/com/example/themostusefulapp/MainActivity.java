@@ -1,68 +1,57 @@
 package com.example.themostusefulapp;
 
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+
 public class MainActivity extends AppCompatActivity {
-
-    final String TAG = this.getClass().getSimpleName();
-
-    LinearLayout home_ly;
-    BottomNavigationView bottomNavigationView;
+    public MainActivity() {
+        super(R.layout.activity_main);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        init(); //객체 정의
-        SettingListener(); //리스너 등록
+        /* ==== set initial fragment ==== */
 
-        //맨 처음 시작할 탭 설정
-        bottomNavigationView.setSelectedItemId(R.id.home);
-    }
-
-    private void init() {
-        home_ly = findViewById(R.id.home);
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-    }
-
-    private void SettingListener() {
-        //선택 리스너 등록
-        bottomNavigationView.setOnNavigationItemSelectedListener(new TabSelectedListener());
-    }
-
-    class TabSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
-                case R.id.tab_phonenum: {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.home, new fragment_phone())
-                            .commit();
-                    return true;
-                }
-                case R.id.tab_image: {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.home, new fragment_image())
-                            .commit();
-                    return true;
-                }
-                case R.id.tab_todo: {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.home, new fragment_todo())
-                            .commit();
-                    return true;
-                }
-            }
-
-            return false;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (savedInstanceState == null) {
+            fragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.tabContainer, FragmentPhone.class, null)
+                    .commit();
         }
+
+        /* ==== set navigation bar ==== */
+
+        BottomNavigationView navigation = findViewById(R.id.bottomNavigationView);
+        navigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.tab_phonenum)
+                fragmentManager.beginTransaction()
+                        .setReorderingAllowed(true)
+                        .replace(R.id.tabContainer, FragmentPhone.class, null)
+                        .commit();
+            else if (itemId == R.id.tab_image)
+                fragmentManager.beginTransaction()
+                        .setReorderingAllowed(true)
+                        .replace(R.id.tabContainer, fragment_image.class, null)
+                        .commit();
+            else if (itemId == R.id.tab_todo)
+                fragmentManager.beginTransaction()
+                        .setReorderingAllowed(true)
+                        .replace(R.id.tabContainer, fragment_todo.class, null)
+                        .commit();
+            else
+                return false;
+            return true;
+        });
+        navigation.setOnItemReselectedListener(null);
     }
 }
