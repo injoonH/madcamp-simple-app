@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment_todo">
+    tools:context=".FragmentTodo">
 
     <LinearLayout
         android:id="@+id/outlayout"
@@ -38,16 +38,18 @@
 
         </LinearLayout>
 
-        <FrameLayout
-            android:id="@+id/todoframelayout"
-            android:layout_width="match_parent"
-            android:layout_height="685dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/refresh_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </FrameLayout>
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

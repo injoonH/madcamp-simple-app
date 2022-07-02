@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             fragmentManager.beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.tabContainer, FragmentPhone.class, null)
+                    .add(R.id.tabContainer, FragmentContact.class, null)
                     .commit();
         }
 
@@ -36,17 +36,17 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.tab_phonenum)
                 fragmentManager.beginTransaction()
                         .setReorderingAllowed(true)
-                        .replace(R.id.tabContainer, FragmentPhone.class, null)
+                        .replace(R.id.tabContainer, FragmentContact.class, null)
                         .commit();
             else if (itemId == R.id.tab_image)
                 fragmentManager.beginTransaction()
                         .setReorderingAllowed(true)
-                        .replace(R.id.tabContainer, fragment_image.class, null)
+                        .replace(R.id.tabContainer, FragmentImage.class, null)
                         .commit();
             else if (itemId == R.id.tab_todo)
                 fragmentManager.beginTransaction()
                         .setReorderingAllowed(true)
-                        .replace(R.id.tabContainer, fragment_todo.class, null)
+                        .replace(R.id.tabContainer, FragmentTodo.class, null)
                         .commit();
             else
                 return false;

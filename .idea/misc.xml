@@ -5,6 +5,8 @@
       <map>
         <entry key="..\:/Users/82105/Desktop/mc firstapp/madcamp-simple-app/app/src/main/res/drawable-v24/ic_check_solid.xml" value="0.1205" />
         <entry key="..\:/Users/82105/Desktop/mc firstapp/madcamp-simple-app/app/src/main/res/layout/activity_main.xml" value="0.109375" />
+        <entry key="..\:/Users/82105/Desktop/mc firstapp/madcamp-simple-app/app/src/main/res/layout/contacts_list_item.xml" value="0.109375" />
+        <entry key="..\:/Users/82105/Desktop/mc firstapp/madcamp-simple-app/app/src/main/res/layout/fragment_contact.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/82105/Desktop/mc firstapp/madcamp-simple-app/app/src/main/res/layout/fragment_image.xml" value="0.109375" />
         <entry key="..\:/Users/82105/Desktop/mc firstapp/madcamp-simple-app/app/src/main/res/layout/fragment_phone.xml" value="0.109375" />
         <entry key="..\:/Users/82105/Desktop/mc firstapp/madcamp-simple-app/app/src/main/res/layout/fragment_todo.xml" value="0.264" />

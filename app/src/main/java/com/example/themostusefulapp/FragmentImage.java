@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-public class fragment_image extends Fragment {
+public class FragmentImage extends Fragment {
 
-    public fragment_image() {
+    public FragmentImage() {
         // Required empty public constructor
     }
 

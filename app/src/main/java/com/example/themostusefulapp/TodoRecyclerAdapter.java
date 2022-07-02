@@ -21,6 +21,7 @@ public class TodoRecyclerAdapter extends RecyclerView.Adapter<TodoRecyclerAdapte
 
     ArrayList<TodoData> items = new ArrayList<TodoData>();
 
+
     @NonNull
     @Override
     public TodoRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -77,13 +78,28 @@ public class TodoRecyclerAdapter extends RecyclerView.Adapter<TodoRecyclerAdapte
 
                 private void deleteToDo(String TODO){
                     //데이터베이스의 테이블을 삭제하는 sql문문
-                   String deleteSql = "delete from " + TodoDatabase.TABLE_NOTE + " where " + "  TODO = '" + TODO+"'";
+                    String deleteSql = "delete from " + TodoDatabase.TABLE_NOTE + " where " + "  TODO = '" + TODO+"'";
                     TodoDatabase database = TodoDatabase.getInstance(context);
-                    database.execSQL(deleteSql);
+                    //삭제하는 sql문 실행행
+                   database.execSQL(deleteSql);
                 }
             });
 
         }
+        //EditText에서 입력받은 checkBox의 텍스트를 checkBox의 Text에 넣을 수 있게 하는 메서드
+        public void setItem(TodoData item){
+            checkBox.setText(item.getTodo());
+        }
+
+        //아이템들을 담은 LinearLayout을 보여주게하는 메서드
+        public void setLayout(){
+            layoutTodo.setVisibility(View.VISIBLE);
+        }
+    }
+
+    //배열에 있는 item들을 가리킴
+    public void setItems(ArrayList<TodoData> items){
+        this.items = items;
     }
 }
 

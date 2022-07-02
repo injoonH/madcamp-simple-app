@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class TodoDatabase {
 
-    private static final String TAG = "NoteDatabase";
+    private static final String TAG = "TodoDatabase";
 
     private static TodoDatabase database;
     public static String DATABASE_NAME = "todo.db";
@@ -17,18 +17,20 @@ public class TodoDatabase {
 
     private Context context;
     private SQLiteDatabase db;
+    private DatabaseHelper dbHelper;
 
     private TodoDatabase(Context context){
         this.context = context;
     }
 
-    public static TodoDatabase getInstance(fragment_todo context){
+    public static TodoDatabase getInstance(Context context){
         if(database == null){
-            database = new TodoDatabase(context.getActivity());
+            database = new TodoDatabase(context);
         }
         return database;
     }
 
+    //이후 리스트를 표시할 때 현지 위치를 나타내는 커서역할을 함.
     public Cursor rawQuery(String SQL){
 
         Cursor c1 = null;
@@ -41,6 +43,7 @@ public class TodoDatabase {
         return c1;
     }
 
+    //sql문을 실행시키는 역할을 함
     public boolean execSQL(String SQL) {
 
         try {
@@ -53,29 +56,18 @@ public class TodoDatabase {
         return true;
     }
 
-    public boolean open(){
-
-        //앞에 DatabaseHelper가 없었음
-        DatabaseHelper dbHelper = new DatabaseHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
-        db = dbHelper.getWritableDatabase();
-
-        return true;
-    }
-
-    public void close(){
-        db.close();
-        database = null;
-    }
-
     private class DatabaseHelper extends SQLiteOpenHelper {
         public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
             super(context, name,factory,version);
         }
 
 
+
+
         @Override
         public void onCreate(SQLiteDatabase db) {
 
+            //테이블 초기화
             String DROP_SQL = "drop table if exists " +TABLE_NOTE;
 
             try {
@@ -85,6 +77,7 @@ public class TodoDatabase {
                 Log.e(TAG, "Exception in DROP_SQL", ex);
             }
 
+            //테이블 생성
             String CREATE_SQL = "create table " + TABLE_NOTE + "("
                     + " _id integer NOT NULL PRIMARY KEY AUTOINCREMENT, "
                     + "  TODO TEXT DEFAULT '' "
@@ -95,6 +88,7 @@ public class TodoDatabase {
                 Log.e(TAG,"Exception in CREATE_SQL", ex);
             }
 
+            //테이블의 인덱스 붙이기
             String CREATE_INDEX_SQL = "create index " + TABLE_NOTE + "_IDX ON " + TABLE_NOTE + "("
                     + "_id"
                     + ")";
@@ -108,6 +102,22 @@ public class TodoDatabase {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         }
+    }
+
+
+    //데이터베이스 열기
+    public boolean open(){
+
+        dbHelper = new DatabaseHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
+        db = dbHelper.getWritableDatabase();
+
+        return true;
+    }
+
+    //데이터베이스 닫기
+    public void close(){
+        db.close();
+        database = null;
     }
 
 }
