@@ -1,18 +1,15 @@
-package com.example.themostusefulapp;
+package com.example.themostusefulapp.ThreeMenuFragment;
 
 import android.Manifest;
-import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -20,21 +17,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.ByteArrayInputStream;
+import com.example.themostusefulapp.Gallery.GalleryAdapter;
+import com.example.themostusefulapp.Gallery.GalleryClickImage;
+import com.example.themostusefulapp.Gallery.GalleryData;
+import com.example.themostusefulapp.R;
+
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
 
+public class FragmentGallery extends Fragment {
 
-public class FragmentContacts extends Fragment {
     private ActivityResultLauncher<String[]> requestPermissionLauncher;
-    private ContactsRecViewAdapter adapter;
+    private GalleryAdapter adapter;
+//    ImageView imageView1;
 
-    public FragmentContacts() {
-        super(R.layout.fragment_contacts);
+    public FragmentGallery() {
+        super(R.layout.fragment_gallery);
     }
 
     @Override
@@ -47,6 +50,16 @@ public class FragmentContacts extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final Context context = view.getContext();
 
+//        adapter.setOnItemClickListener(
+//                new GalleryAdapter.OnItemClickListener(){
+//                    @Override
+//                    public void onItemClick(View v, int position){
+//                        //아이템 클릭 이벤트를 FragmentGallery에서 처리리
+//
+//                   }
+//                }
+//        );
+
         /* ==== handle permission ==== */
 
         requestPermissionLauncher =
@@ -55,9 +68,9 @@ public class FragmentContacts extends Fragment {
                         if (permission.getValue()) {
                             // Permission is granted. Continue the action or workflow in your app.
                             Log.d("PERMISSION", "requestPermissionLauncher :: " + permission.getKey() + " granted");
-                            if (permission.getKey().equals(Manifest.permission.READ_CONTACTS)) {
-                                Log.d("PERMISSION", "Load contacts data from the device for the first time");
-                                getContactList(context);
+                            if (permission.getKey().equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                                Log.d("PERMISSION", "Load gallery data from the device for the first time");
+                                getGalleryList(context);
                             }
                         } else {
                             // Explain to the user that the feature is unavailable because the
@@ -72,38 +85,29 @@ public class FragmentContacts extends Fragment {
 
         /* ==== create RecyclerView ==== */
 
-        adapter = new ContactsRecViewAdapter(context);
-        RecyclerView contactsRecView = view.findViewById(R.id.contactsRecView);
-        contactsRecView.setAdapter(adapter);
-        contactsRecView.setLayoutManager(new LinearLayoutManager(context));
+        adapter = new GalleryAdapter(context);
+        RecyclerView galleryRecycleView = view.findViewById(R.id.galleryrecyclerview);
+        galleryRecycleView.setAdapter(adapter);
+        galleryRecycleView.setLayoutManager(new GridLayoutManager(context, 2));
 
         /* ==== create new contact ==== */
 
-        EditText editName = view.findViewById(R.id.editName);
-        EditText editNumber = view.findViewById(R.id.editNumber);
-        Button contactAddBtn = view.findViewById(R.id.contactAddBtn);
-
-        // TODO: Get photo from user
-        contactAddBtn.setOnClickListener(v -> {
-            String name = editName.getText().toString();
-            String number = editNumber.getText().toString();
-
-            if (name.isEmpty()) {
-                Toast.makeText(context, "Name is empty", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (number.isEmpty()) {
-                Toast.makeText(context, "Number is empty", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            adapter.addContact(new Contact(name, number, null));
-        });
+        ImageView imageView = view.findViewById(R.id.image);
 
         /* ==== request contacts permission ==== */
 
-        requestPermission(context, new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE});
+        requestPermission(context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
+
+
+//        imageView1 = getView().findViewById(R.id.image);
+//        Log.d("Check", "before clicklistener");
+//        imageView1.setOnClickListener(v -> {
+//            Log.d("Check", "before clicklistener2");
+//            Intent intent = new Intent(getActivity(), GalleryClickImage.class);
+//            startActivity(intent);
+//        });
     }
+
 
     private void requestPermission(Context context, String[] permissions) {
         final ArrayList<String> permissionsToRequest = new ArrayList<>();
@@ -112,9 +116,9 @@ public class FragmentContacts extends Fragment {
             // You can use the API that requires the permission.
             if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED) {
                 Log.d("PERMISSION", "Permission " + permission + " already granted");
-                if (permission.equals(Manifest.permission.READ_CONTACTS)) {
-                    Log.d("PERMISSION", "Load contacts data from the device");
-                    getContactList(context);
+                if (permission.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Log.d("PERMISSION", "Load gallery data from the device");
+                    getGalleryList(context);
                 }
                 continue;
             }
@@ -137,67 +141,79 @@ public class FragmentContacts extends Fragment {
             requestPermissionLauncher.launch(permissionsToRequest.toArray(new String[0]));
     }
 
-    private void getContactList(Context context) {
+    private void getGalleryList(Context context) {
         Cursor cursor = context.getContentResolver().query(
-                ContactsContract.Contacts.CONTENT_URI,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 null,
                 null,
                 null,
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC "
+                null
+                //MediaStore.Images.CommonDataKinds.Phone.DISPLAY_NAME + " ASC "
         );
 
         while (cursor.moveToNext()) {
             String id = cursor.getString(cursor.getColumnIndexOrThrow(
-                    ContactsContract.Contacts._ID
-            ));
-            String name = cursor.getString(cursor.getColumnIndexOrThrow(
-                    ContactsContract.Contacts.DISPLAY_NAME
+                    MediaStore.Images.ImageColumns._ID
             ));
 
-            Cursor phoneCursor = context.getContentResolver().query(
-                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            Cursor galleryCursor = context.getContentResolver().query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     null,
-                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?",
+                    MediaStore.Images.Media._ID + "=?",
                     new String[]{id},
                     null
             );
 
-            if (phoneCursor.moveToNext()) {
-                String number = phoneCursor.getString(phoneCursor.getColumnIndexOrThrow(
-                        ContactsContract.CommonDataKinds.Phone.NUMBER
+            if (galleryCursor.moveToNext()) {
+                String imagepath = galleryCursor.getString(galleryCursor.getColumnIndexOrThrow(
+                        MediaStore.Images.ImageColumns.DATA
                 ));
-                InputStream photo = getPhotoStream(context, Long.parseLong(id));
 
-                adapter.addContact(new Contact(name, number, photo));
+                Log.d("Check DATA", imagepath);
+
+
+                InputStream gallery;
+                try{
+                    gallery = new FileInputStream(imagepath);
+                } catch (Exception e){
+                    galleryCursor.close();
+                    cursor.close();
+                    return;
+                }
+
+                adapter.addImage(new GalleryData(gallery));
             }
-            phoneCursor.close();
+            galleryCursor.close();
         }
         cursor.close();
     }
 
-    private InputStream getPhotoStream(Context context, long contactId) {
-        Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
-        Uri photoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-        Cursor cursor = context.getContentResolver().query(
-                photoUri,
-                new String[]{ContactsContract.Contacts.Photo.PHOTO},
-                null,
-                null,
-                null
-        );
-
-        if (cursor == null)
-            return null;
-
-        if (cursor.moveToFirst()) {
-            byte[] data = cursor.getBlob(0);
-            if (data != null) {
-                cursor.close();
-                return new ByteArrayInputStream(data);
-            }
-        }
-
-        cursor.close();
-        return null;
-    }
+//    private InputStream getGalleryStream(Context context, long imageId) {
+//        Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageId);
+//        Cursor cursor = context.getContentResolver().query(
+//                imageUri,
+//                new String[]{MediaStore.Images.Media._ID},
+//                null,
+//                null,
+//                null
+//        );
+//
+//        if (cursor == null)
+//            return null;
+//
+//        Log.d("Check", "before moveToFirst");
+//        if (cursor.moveToFirst()) {
+//            Log.d("Check", "in moveToFirst");
+//            byte[] data = cursor.getBlob(0);
+//            if (data != null) {
+//                Log.d("Check", "in moveToFirst2");
+//                cursor.close();
+//                return new ByteArrayInputStream(data);
+//            }
+//        }
+//
+//        Log.d("Check", "in moveToFirst3");
+//        cursor.close();
+//        return null;
+//    }
 }

@@ -6,7 +6,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:padding="20dp"
-    tools:context=".FragmentContacts">
+    tools:context=".ThreeMenuFragment.FragmentContacts">
 
     <EditText
         android:id="@+id/editName"

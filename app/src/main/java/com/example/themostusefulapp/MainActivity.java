@@ -6,6 +6,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.themostusefulapp.ThreeMenuFragment.FragmentContacts;
+import com.example.themostusefulapp.ThreeMenuFragment.FragmentGallery;
+import com.example.themostusefulapp.ThreeMenuFragment.FragmentTodo;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 

@@ -1,14 +1,15 @@
-package com.example.themostusefulapp;
+package com.example.themostusefulapp.Gallery;
 
 import android.widget.ImageView;
 
 import java.io.InputStream;
 
+
 public class GalleryData {
 
-    ImageView imageView;
+    InputStream imageView;
 
-    public GalleryData(ImageView imageView) {
+    public GalleryData(InputStream imageView) {
         this.imageView = imageView;
     }
 
@@ -16,7 +17,7 @@ public class GalleryData {
         return imageView;
     }
 
-    public void setImageView(ImageView imageView) {
+    public void setImageView(InputStream imageView) {
         this.imageView = imageView;
     }
 }

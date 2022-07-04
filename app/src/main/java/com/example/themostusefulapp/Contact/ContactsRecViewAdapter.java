@@ -1,4 +1,4 @@
-package com.example.themostusefulapp;
+package com.example.themostusefulapp.Contact;
 
 import android.Manifest;
 import android.content.Context;
@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.themostusefulapp.R;
 
 import java.util.ArrayList;
 

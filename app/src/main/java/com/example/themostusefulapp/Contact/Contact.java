@@ -1,4 +1,4 @@
-package com.example.themostusefulapp;
+package com.example.themostusefulapp.Contact;
 
 import java.io.InputStream;
 
