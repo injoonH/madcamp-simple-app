@@ -8,6 +8,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/tabContainer"
         android:name="com.example.themostusefulapp.ThreeMenuFragment.FragmentContacts"

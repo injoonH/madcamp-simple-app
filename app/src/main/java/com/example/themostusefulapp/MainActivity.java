@@ -1,6 +1,11 @@
 package com.example.themostusefulapp;
 
+import android.app.ProgressDialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         /* ==== set initial fragment ==== */
+
+//        ProgressBar progressBar = (ProgressBar)findViewById(R.id.progress);
+//        Sprite doubleBounce = new DoubleBounce();
+//        progressBar.setIndeterminateDrawable(doubleBounce);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {

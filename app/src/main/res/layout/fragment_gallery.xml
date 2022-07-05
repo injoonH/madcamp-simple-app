@@ -4,15 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/lightblue32"
+
+    android:layout_gravity="center"
     tools:context=".ThreeMenuFragment.FragmentGallery">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/galleryrecyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
-            android:layout_gravity="center"
-            tools:itemCount="30" />
+            tools:itemCount="30"
+            tools:listitem="@layout/gallery_item" />
 
 </FrameLayout>

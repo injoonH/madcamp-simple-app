@@ -2,7 +2,6 @@ package com.example.themostusefulapp.ThreeMenuFragment;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -18,10 +17,10 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.themostusefulapp.Gallery.GalleryAdapter;
-import com.example.themostusefulapp.Gallery.GalleryClickImage;
 import com.example.themostusefulapp.Gallery.GalleryData;
 import com.example.themostusefulapp.R;
 
@@ -34,11 +33,11 @@ public class FragmentGallery extends Fragment {
 
     private ActivityResultLauncher<String[]> requestPermissionLauncher;
     private GalleryAdapter adapter;
-//    ImageView imageView1;
 
     public FragmentGallery() {
         super(R.layout.fragment_gallery);
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,16 +48,23 @@ public class FragmentGallery extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final Context context = view.getContext();
-
-//        adapter.setOnItemClickListener(
-//                new GalleryAdapter.OnItemClickListener(){
-//                    @Override
-//                    public void onItemClick(View v, int position){
-//                        //아이템 클릭 이벤트를 FragmentGallery에서 처리리
 //
-//                   }
-//                }
-//        );
+//        ArrayList<GalleryData> photolist = new ArrayList<>();
+//
+//        RecyclerView recyclerView = getView().findViewById(R.id.galleryrecyclerview);
+//        Log.d("Check", "before setlayoutmanager");
+//        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+////
+//        adapter = new GalleryAdapter(photolist, context);
+//        recyclerView.setAdapter(adapter);
+//        Log.d("Check", "before setonitemclicklistener");
+//
+//        adapter.setOnItemClickListener(new GalleryAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View v, int pos) {
+//
+//            }
+//        });
 
         /* ==== handle permission ==== */
 
@@ -84,15 +90,17 @@ public class FragmentGallery extends Fragment {
                 });
 
         /* ==== create RecyclerView ==== */
-
         adapter = new GalleryAdapter(context);
         RecyclerView galleryRecycleView = view.findViewById(R.id.galleryrecyclerview);
         galleryRecycleView.setAdapter(adapter);
         galleryRecycleView.setLayoutManager(new GridLayoutManager(context, 2));
 
-        /* ==== create new contact ==== */
 
-        ImageView imageView = view.findViewById(R.id.image);
+//        RecyclerView galleryRecycleView = view.findViewById(R.id.galleryrecyclerview);
+//        galleryRecycleView.setAdapter(adapter);
+//        galleryRecycleView.setLayoutManager(new GridLayoutManager(context, 2));
+
+        /* ==== create new contact ==== */
 
         /* ==== request contacts permission ==== */
 
@@ -180,6 +188,8 @@ public class FragmentGallery extends Fragment {
                     cursor.close();
                     return;
                 }
+
+                Log.d("Check", "gallery"+gallery);
 
                 adapter.addImage(new GalleryData(gallery));
             }

@@ -8,10 +8,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -31,11 +34,22 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 
 
 public class FragmentContacts extends Fragment {
     private ActivityResultLauncher<String[]> requestPermissionLauncher;
     private ContactsRecViewAdapter adapter;
+    Button btn_add;
+
+//     int[] images = {R.drawable.woman1,
+//             R.drawable.woman2,
+//             R.drawable.woman3,
+//             R.drawable.woman4,
+//             R.drawable.man1,
+//             R.drawable.man2,
+//             R.drawable.man3,
+//             R.drawable.man4};
 
     public FragmentContacts() {
         super(R.layout.fragment_contacts);
@@ -50,6 +64,11 @@ public class FragmentContacts extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final Context context = view.getContext();
+
+        btn_add=getView().findViewById(R.id.contactAddBtn);
+        btn_add.setOnClickListener(v -> Toast.makeText(context, "연락처를 누르면 전화가 연결됩니다.", Toast.LENGTH_SHORT).show());
+
+//        int randomImage=images[new Random().nextInt(images.length)];
 
         /* ==== handle permission ==== */
 
@@ -100,6 +119,11 @@ public class FragmentContacts extends Fragment {
                 Toast.makeText(context, "Number is empty", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            Toast.makeText(context, "하단에 연락처가 추가되었습니다.\n연락처를 누르면 전화가 연결됩니다.", Toast.LENGTH_SHORT).show();
+
+            InputMethodManager mInputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            mInputMethodManager.hideSoftInputFromWindow(editNumber.getWindowToken(), 0);
 
             adapter.addContact(new Contact(name, number, null));
         });

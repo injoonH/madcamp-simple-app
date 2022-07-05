@@ -1,7 +1,5 @@
 package com.example.themostusefulapp.Gallery;
 
-import android.widget.ImageView;
-
 import java.io.InputStream;
 
 
