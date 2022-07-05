@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-public class fragment_todo extends Fragment {
-    public fragment_todo() {
+public class FragmentImage extends Fragment {
+
+    public FragmentImage() {
+        // Required empty public constructor
     }
 
     @Override
@@ -17,9 +19,9 @@ public class fragment_todo extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_todo, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_image, container, false);
     }
+
+
 }

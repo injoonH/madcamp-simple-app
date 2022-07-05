@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,12 +30,12 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class FragmentPhone extends Fragment {
+public class FragmentContact extends Fragment {
     private ActivityResultLauncher<String[]> requestPermissionLauncher;
     private ContactsRecViewAdapter adapter;
 
-    public FragmentPhone() {
-        super(R.layout.fragment_phone);
+    public FragmentContact() {
+        super(R.layout.fragment_contact);
     }
 
     @Override

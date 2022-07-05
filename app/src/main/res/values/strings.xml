@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">The most useful app</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+
+    <string name="todo_tab_title">Todo</string>
+    <string name="todo_add_button_description">Todo</string>
+    <string name="todo_delete_all_button_description">Delete all</string>
+
+    <string name="todo_form_dialog_banner_description">Todo form banner</string>
+    <string name="todo_form_dialog_content_hint">Input Todo</string>
 </resources>
