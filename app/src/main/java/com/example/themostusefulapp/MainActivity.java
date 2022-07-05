@@ -1,14 +1,69 @@
 package com.example.themostusefulapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.ProgressDialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
+import com.example.themostusefulapp.ThreeMenuFragment.FragmentContacts;
+import com.example.themostusefulapp.ThreeMenuFragment.FragmentGallery;
+import com.example.themostusefulapp.ThreeMenuFragment.FragmentTodo;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 public class MainActivity extends AppCompatActivity {
+    public MainActivity() {
+        super(R.layout.activity_main);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        /* ==== set initial fragment ==== */
+
+//        ProgressBar progressBar = (ProgressBar)findViewById(R.id.progress);
+//        Sprite doubleBounce = new DoubleBounce();
+//        progressBar.setIndeterminateDrawable(doubleBounce);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (savedInstanceState == null) {
+            fragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.tabContainer, FragmentContacts.class, null)
+                    .commit();
+        }
+
+        /* ==== set navigation bar ==== */
+
+        BottomNavigationView navigation = findViewById(R.id.bottomNavigationView);
+        navigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.tab_phonenum)
+                fragmentManager.beginTransaction()
+                        .setReorderingAllowed(true)
+                        .replace(R.id.tabContainer, FragmentContacts.class, null)
+                        .commit();
+            else if (itemId == R.id.tab_image)
+                fragmentManager.beginTransaction()
+                        .setReorderingAllowed(true)
+                        .replace(R.id.tabContainer, FragmentGallery.class, null)
+                        .commit();
+            else if (itemId == R.id.tab_todo)
+                fragmentManager.beginTransaction()
+                        .setReorderingAllowed(true)
+                        .replace(R.id.tabContainer, FragmentTodo.class, null)
+                        .commit();
+            else
+                return false;
+            return true;
+        });
+        navigation.setOnItemReselectedListener(null);
     }
 }
