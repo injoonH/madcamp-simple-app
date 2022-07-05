@@ -1,98 +1,94 @@
 package com.example.themostusefulapp;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.util.ArrayList;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
-public class TodoFragment extends Fragment {
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-    private static final String TAG = "TodoFragment";
+import com.example.themostusefulapp.adapters.TodoListAdapter;
+import com.example.themostusefulapp.data.Todo;
+import com.example.themostusefulapp.data.TodoViewModel;
 
-    RecyclerView recyclerView;
-    TodoRecyclerAdapter adapter;
-    Context context;
+public class TodoFragment extends Fragment implements
+        TodoFormDialogFragment.TodoDialogListener,
+        TodoDeleteAllDialogFragment.TodoDeleteAllDialogListener,
+        TodoListAdapter.TodoListAdapterListener {
+    private TodoViewModel mTodoViewModel;
+    private TodoListAdapter adapter;
 
-    SwipeRefreshLayout swipeRefreshLayout;
+    public TodoFragment() {
+        super(R.layout.fragment_todo);
+    }
+
+    public static TodoFragment newInstance() {
+        return new TodoFragment();
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //fragment_todo 에 인플레이션을 함
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_todo, container, false);
-        initUI(rootView);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        loadTodoListData();
+        final RecyclerView todoRecyclerView = view.findViewById(R.id.todoRecView);
+        adapter = new TodoListAdapter(new TodoListAdapter.TodoDiff(), this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(todoRecyclerView);
+        todoRecyclerView.setAdapter(adapter);
+        todoRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-
-        //당겨서 새로고침
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadTodoListData();
-                swipeRefreshLayout.setRefreshing(false);
-            }
+        final FloatingActionButton todoAddBtn = view.findViewById(R.id.todoAddBtn);
+        todoAddBtn.setOnClickListener(v -> {
+            TodoFormDialogFragment dialog = new TodoFormDialogFragment(this);
+            dialog.show(getParentFragmentManager(), "todo_form_dialog");
         });
 
-        return rootView;
+        final ImageView deleteAllBtn = view.findViewById(R.id.todoDeleteAllBtn);
+        deleteAllBtn.setOnClickListener(v -> {
+            TodoDeleteAllDialogFragment dialog = new TodoDeleteAllDialogFragment(this);
+            dialog.show(getParentFragmentManager(), "todo_delete_all_dialog");
+        });
+
+        mTodoViewModel = new ViewModelProvider(this).get(TodoViewModel.class);
+        mTodoViewModel.getAllTodo().observe(getViewLifecycleOwner(), adapter::submitList);
     }
 
-
-    private void initUI(ViewGroup rootView){
-        //RecyclerView 연결
-        recyclerView = rootView.findViewById(R.id.recyclerview);
-
-        //LinearLayoutManager을 이용하여 recyclerView 설정
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-        //어댑터 연결
-        adapter = new TodoRecyclerAdapter();
-        recyclerView.setAdapter(adapter);
-    }
-
-    public int loadTodoListData(){
-
-        //데이터를 가져오는 sql문 select... (id의 역순으로 정렬)
-        String loadSql = "select _id, TODO from " + TodoDatabase.TABLE_NOTE + " order by _id desc";
-
-        int recordCount = -1;
-        TodoDatabase database = TodoDatabase.getInstance(context);
-
-        if(database != null){
-            //cursor를 객체화하여 rawQuery문 저장
-            Cursor outCursor = database.rawQuery(loadSql);
-
-            recordCount = outCursor.getCount();
-
-            //_id, TODO가 담겨질 배열 생성
-            ArrayList<TodoData> items = new ArrayList<>();
-
-            //for문을 통해 하나하나 추가
-            for(int i = 0; i < recordCount; i++){
-                outCursor.moveToNext();
-
-                int _id = outCursor.getInt(0);
-                String todo = outCursor.getString(1);
-                items.add(new TodoData(todo, _id));
-            }
-            outCursor.close();
-
-            //어댑터에 연결 및 데이터셋 변경
-            adapter.setItems(items);
-            adapter.notifyDataSetChanged();
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
         }
 
-        return recordCount;
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            Todo todoItem = adapter.getCurrentList().get(viewHolder.getAdapterPosition());
+            Log.d("YUWOL", "onSwiped: " + todoItem);
+            mTodoViewModel.delete(todoItem);
+        }
+    };
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        String todoContent = ((TodoFormDialogFragment) dialog).getTodoInputContent();
+        mTodoViewModel.insert(new Todo(todoContent, false));
     }
 
+    @Override
+    public void onTodoDeleteAllPositiveClick() {
+        mTodoViewModel.deleteAll();
+    }
+
+    @Override
+    public void updateTodoItem(Todo todo) {
+        mTodoViewModel.update(todo);
+    }
 }

@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             else if (itemId == R.id.tab_todo)
                 fragmentManager.beginTransaction()
                         .setReorderingAllowed(true)
-                        .replace(R.id.tabContainer, FragmentTodo.class, null)
+                        .replace(R.id.tabContainer, TodoFragment.class, null)
                         .commit();
             else
                 return false;
